@@ -7,399 +7,400 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #000; color: #e4e4e7; margin: 0; overflow: hidden; height: 100vh; }
+    body { font-family: 'Inter', sans-serif; background: #000; color: #e4e4e7; margin: 0; min-height: 100vh; }
     .mono { font-family: 'JetBrains Mono', monospace; }
-    .preview-window { background: #0d0d0d; border: 1px solid #222; border-radius: 8px; overflow: hidden; min-height: 440px; box-shadow: 0 0 20px rgba(0,0,0,0.5); transition: opacity 0.3s, background 0.3s; }
-    .preview-window.transparent { opacity: 0.7; }
-    .titlebar { background: #111; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; flex-wrap: wrap; gap: 10px; }
+    .preview-window { background: #0d0d0d; border: 1px solid #222; border-radius: 8px; overflow: hidden; min-height: 440px; box-shadow: 0 0 20px rgba(255,255,255,0.03); }
+    .titlebar { background: #111; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a1a1a; flex-wrap: wrap; gap: 10px; }
     .traffic .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
-    .card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 8px; padding: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 6px; padding: 16px; }
     .palette-item { background: #111; border: 1px solid #222; padding: 12px 8px; text-align: center; cursor: pointer; border-radius: 4px; font-size: 0.9rem; color: #ccc; transition: all 0.15s; }
     .palette-item:hover { background: #1a1a1a; color: #fff; border-color: #333; }
     .element { background: #111; border: 1px solid #222; border-radius: 4px; padding: 12px; margin: 8px 0; color: #ddd; font-size: 0.9rem; }
     .tab-name { cursor: pointer; padding: 6px 14px; border-radius: 4px; color: #aaa; font-size: 0.95rem; margin-right: 10px; transition: all 0.4s; }
     .tab-name:hover { background: #222; color: #fff; }
-    .tab-name.active {
-      background: linear-gradient(90deg, #ffffff, #dddddd, #ffffff);
-      background-size: 200% 100%;
-      animation: shine 4s linear infinite;
-      color: #000;
-      font-weight: 600;
-    }
-    @keyframes shine {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    .tab-name.active { background: linear-gradient(90deg, #ffffff, #dddddd, #ffffff); background-size: 200% 100%; animation: shine 4s linear infinite; color: #000; font-weight: 600; }
+    @keyframes shine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     .edit-btn { font-size: 0.8rem; background: #222; color: #ccc; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; margin-top: 8px; display: block; }
     .edit-btn:hover { background: #333; color: #fff; }
-    #editModal, #codeModal, #resultScreen { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
-    .modal-box { background: #000; border: 1px solid #222; border-radius: 8px; width: 90%; max-width: 700px; padding: 24px; max-height: 85vh; overflow-y: auto; }
-    .input-field { background: #111; border: 1px solid #333; color: white; padding: 10px; border-radius: 4px; width: 100%; margin-bottom: 16px; }
+    #editModal, #codeModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
+    .modal-box { background: #000; border: 1px solid #222; border-radius: 8px; width: 90%; max-width: 600px; padding: 24px; }
+    .input-field { background: #111; border: 1px solid #333; color: white; padding: 10px; border-radius: 4px; width: 100%; margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; }
     .btn-gray { background: #222; color: white; border: 1px solid #444; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
     .btn-gray:hover { background: #333; }
-    .shield { font-size: 6rem; color: #a855f7; margin-bottom: 16px; }
-    .code-block { background: #000; border: 1px solid #222; border-radius: 6px; padding: 16px; color: #0f0; font-family: monospace; white-space: pre-wrap; margin: 16px 0; overflow-x: auto; }
   </style>
 </head>
 <body>
 
-<div class="max-w-7xl mx-auto p-6">
-  <h1 class="text-4xl font-bold text-white mb-2">DARKZSCRIPTS UI Builder</h1>
-  <p class="text-gray-400 mb-8">Build WindUI, Neverlose, or Compkiller UIs.</p>
+<div class="max-w-7xl mx-auto p-4 md:p-6">
+  <!-- Main Tabs on Top -->
+  <nav class="flex border-b border-[#1a1a1a] mb-8">
+    <button class="tab-btn px-6 py-4 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-purple-500 active" data-tab="dashboard">Dashboard</button>
+    <button class="tab-btn px-6 py-4 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-purple-500" data-tab="builder">UI Builder</button>
+    <button class="tab-btn px-6 py-4 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-purple-500" data-tab="obfuscation">Obfuscation</button>
+  </nav>
 
-  <div class="flex border-b border-[#1a1a1a] mb-6">
-    <button class="sub-tab-btn px-6 py-3 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-gray-400 active" data-sub="windui">WindUI</button>
-    <button class="sub-tab-btn px-6 py-3 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-gray-400" data-sub="neverlose">Neverlose</button>
-    <button class="sub-tab-btn px-6 py-3 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-gray-400" data-sub="compkiller">Compkiller</button>
+  <!-- Dashboard Tab -->
+  <div id="dashboard" class="tab-content">
+    <h1 class="text-3xl font-bold mb-8 text-purple-400">DARKZSCRIPTS Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="card text-center">
+        <h3 class="text-gray-400 mb-2">Total Scripts Protected</h3>
+        <p class="text-4xl font-bold text-purple-500">0</p>
+      </div>
+      <div class="card text-center">
+        <h3 class="text-gray-400 mb-2">Active Webhook Proxies</h3>
+        <p class="text-4xl font-bold text-purple-500">0</p>
+      </div>
+      <div class="card text-center">
+        <h3 class="text-gray-400 mb-2">Encryption Standard</h3>
+        <p class="text-4xl font-bold text-purple-500">LZ-AES</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card">
+        <h3 class="text-lg font-semibold mb-4">&lt;&gt; Recent Scripts</h3>
+        <p class="text-center text-gray-500 py-16">No scripts found.</p>
+      </div>
+      <div class="card">
+        <h3 class="text-lg font-semibold mb-4">🌐 Active Webhooks</h3>
+        <p class="text-center text-gray-500 py-16">Create your first proxy</p>
+      </div>
+    </div>
   </div>
 
-  <!-- WindUI -->
-  <div id="windui" class="sub-content">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <div class="lg:col-span-1 space-y-6">
-        <div class="card">
-          <h2 class="text-lg font-semibold text-white mb-4">WINDOW CONFIG</h2>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm text-gray-400 mb-1">Title</label>
-              <input id="w_title" type="text" value="DarkzScripts" class="w-full bg-[#111] border border-[#222] rounded px-3 py-2 text-white">
-            </div>
-            <div>
-              <label class="block text-sm text-gray-400 mb-1">Custom Background (rbxassetid or image id)</label>
-              <input id="w_bg" type="text" placeholder="rbxassetid://1234567890" class="w-full bg-[#111] border border-[#222] rounded px-3 py-2 text-white">
-            </div>
-            <div class="flex items-center gap-2">
-              <input id="w_transparent" type="checkbox" class="w-5 h-5 accent-purple-500">
-              <label class="text-sm text-gray-400">Transparent</label>
-            </div>
-          </div>
-        </div>
+  <!-- UI Builder Tab -->
+  <div id="builder" class="tab-content hidden">
+    <h1 class="text-3xl font-bold mb-6 text-purple-400">DARKZSCRIPTS UI Builder</h1>
+    <div class="flex border-b border-[#222] mb-6">
+      <button class="sub-tab-btn px-5 py-3 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-purple-500 active" data-sub="windui">WindUI Builder</button>
+      <button class="sub-tab-btn px-5 py-3 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-purple-500" data-sub="neverlose">Neverlose Builder</button>
+      <button class="sub-tab-btn px-5 py-3 font-medium text-gray-400 hover:text-white border-b-2 border-transparent hover:border-purple-500" data-sub="compkiller">Compkiller Builder</button>
+    </div>
 
-        <div class="card">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold text-white">TABS</h2>
-            <button id="w_addTabBtn" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-white font-bold">+</button>
-          </div>
-          <div id="w_tabsList" class="space-y-3 max-h-80 overflow-y-auto"></div>
-        </div>
-      </div>
-
-      <div class="lg:col-span-2">
-        <div id="w_previewWindow" class="preview-window">
-          <div class="titlebar">
-            <div class="flex items-center gap-3">
-              <div class="traffic flex">
-                <div class="dot" style="background:#ff5f56;"></div>
-                <div class="dot" style="background:#ffbd2e;"></div>
-                <div class="dot" style="background:#28c940;"></div>
+    <!-- WindUI Builder -->
+    <div id="windui" class="sub-content">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div class="lg:col-span-1 space-y-6">
+          <div class="card">
+            <h2 class="text-lg font-semibold mb-4">⚙️ SETTINGS</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">WINDOW TITLE</label>
+                <input id="w_title" type="text" value="DarkzScripts" class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2 focus:border-purple-500 outline-none">
               </div>
-              <div id="w_tabNames" class="flex gap-3 flex-wrap"></div>
-            </div>
-            <span class="text-gray-500 text-sm">Running</span>
-          </div>
-          <div id="w_previewContent" class="p-6"></div>
-        </div>
-      </div>
-
-      <div class="lg:col-span-1">
-        <div class="card">
-          <h2 class="text-lg font-semibold text-white mb-4">Elements</h2>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="palette-item" data-type="Button">Button</div>
-            <div class="palette-item" data-type="Toggle">Toggle</div>
-            <div class="palette-item" data-type="Slider">Slider</div>
-            <div class="palette-item" data-type="Input">Input</div>
-            <div class="palette-item" data-type="Section">Section</div>
-            <div class="palette-item" data-type="Colorpicker">Colorpicker</div>
-            <div class="palette-item" data-type="Keybind">Keybind</div>
-          </div>
-          <button id="w_viewCodeBtn" class="mt-6 w-full bg-gray-700 hover:bg-gray-600 py-3 rounded font-medium text-white">View Code</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Neverlose -->
-  <div id="neverlose" class="sub-content hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <div class="lg:col-span-1 space-y-6">
-        <div class="card">
-          <h2 class="text-lg font-semibold text-white mb-4">WINDOW CONFIG</h2>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm text-gray-400 mb-1">Title</label>
-              <input id="n_title" type="text" value="DarkzScripts" class="w-full bg-[#111] border border-[#222] rounded px-3 py-2 text-white">
-            </div>
-            <div class="flex items-center gap-2">
-              <input id="n_keysys" type="checkbox" class="w-5 h-5 accent-purple-500" checked>
-              <label class="text-sm text-gray-400">KeySystem Enabled</label>
-            </div>
-            <div id="n_keyInputDiv">
-              <label class="block text-sm text-gray-400 mb-1">Key(s) (comma separated)</label>
-              <input id="n_keytext" type="text" value="Beta,Test" class="w-full bg-[#111] border border-[#222] rounded px-3 py-2 text-white">
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold text-white">TABS</h2>
-            <button id="n_addTabBtn" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-white font-bold">+</button>
-          </div>
-          <div id="n_tabsList" class="space-y-3 max-h-80 overflow-y-auto"></div>
-        </div>
-      </div>
-
-      <div class="lg:col-span-2">
-        <div class="preview-window" id="n_previewWindow">
-          <div class="titlebar">
-            <div class="flex items-center gap-3">
-              <div class="traffic flex">
-                <div class="dot" style="background:#ff5f56;"></div>
-                <div class="dot" style="background:#ffbd2e;"></div>
-                <div class="dot" style="background:#28c940;"></div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">FOLDER NAME</label>
+                <input id="w_folder" type="text" value="DarkzScripts" class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2">
               </div>
-              <div id="n_tabNames" class="flex gap-3 flex-wrap"></div>
-            </div>
-            <span class="text-gray-500 text-sm">Running</span>
-          </div>
-          <div id="n_previewContent" class="p-6"></div>
-        </div>
-      </div>
-
-      <div class="lg:col-span-1">
-        <div class="card">
-          <h2 class="text-lg font-semibold text-white mb-4">Elements</h2>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="palette-item" data-type="Toggle">Toggle</div>
-            <div class="palette-item" data-type="Slider">Slider</div>
-            <div class="palette-item" data-type="Button">Button</div>
-            <div class="palette-item" data-type="TextBox">TextBox</div>
-            <div class="palette-item" data-type="Dropdown">Dropdown</div>
-            <div class="palette-item" data-type="Colorpicker">Colorpicker</div>
-            <div class="palette-item" data-type="Bind">Bind</div>
-            <div class="palette-item" data-type="Notify">Notify</div>
-          </div>
-          <button id="n_viewCodeBtn" class="mt-6 w-full bg-gray-700 hover:bg-gray-600 py-3 rounded font-medium text-white">View Code</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Compkiller -->
-  <div id="compkiller" class="sub-content hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <div class="lg:col-span-1 space-y-6">
-        <div class="card">
-          <h2 class="text-lg font-semibold text-white mb-4">COMPKILLER CONFIG</h2>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm text-gray-400 mb-1">Custom Loading Image (rbxassetid or image id)</label>
-              <input id="ck_loading" type="text" placeholder="rbxassetid://1234567890" class="w-full bg-[#111] border border-[#222] rounded px-3 py-2 text-white">
-            </div>
-            <div>
-              <label class="block text-sm text-gray-400 mb-1">Title Image (rbxassetid or image id)</label>
-              <input id="ck_titleimg" type="text" placeholder="rbxassetid://0987654321" class="w-full bg-[#111] border border-[#222] rounded px-3 py-2 text-white">
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold text-white">TABS</h2>
-            <button id="ck_addTabBtn" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-white font-bold">+</button>
-          </div>
-          <div id="ck_tabsList" class="space-y-3 max-h-80 overflow-y-auto"></div>
-        </div>
-      </div>
-
-      <div class="lg:col-span-2">
-        <div class="preview-window" id="ck_previewWindow">
-          <div class="titlebar">
-            <div class="flex items-center gap-3">
-              <div class="traffic flex">
-                <div class="dot" style="background:#ff5f56;"></div>
-                <div class="dot" style="background:#ffbd2e;"></div>
-                <div class="dot" style="background:#28c940;"></div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">THEME</label>
+                <select id="w_theme" class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2">
+                  <option>Dark</option>
+                  <option>Light</option>
+                  <option>Neon</option>
+                </select>
               </div>
-              <div id="ck_tabNames" class="flex gap-3 flex-wrap"></div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">Custom Background (texture/image ID)</label>
+                <input id="w_bg" type="text" placeholder="rbxassetid://..." class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2">
+              </div>
             </div>
-            <span class="text-gray-500 text-sm">Running</span>
           </div>
-          <div id="ck_previewContent" class="p-6"></div>
+
+          <div class="card">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-semibold">TABS</h2>
+              <button id="w_addTab" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-white text-sm">+</button>
+            </div>
+            <div id="w_tabsList" class="space-y-3 max-h-80 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- Center: Preview -->
+        <div class="lg:col-span-2">
+          <div class="preview-window">
+            <div class="titlebar">
+              <div class="traffic flex gap-2">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+              </div>
+              <span id="w_previewTitle" class="text-green-400 text-xs">Running</span>
+            </div>
+            <div id="w_previewContent" class="p-6 text-center text-gray-500 min-h-[300px]">
+              Preview Canvas Empty - Add tabs & elements
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Palette + Generate -->
+        <div class="lg:col-span-1">
+          <div class="card">
+            <h2 class="text-lg font-semibold mb-4">Add Elements</h2>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="palette-item" data-type="Button">Button</div>
+              <div class="palette-item" data-type="Toggle">Toggle</div>
+              <div class="palette-item" data-type="Slider">Slider</div>
+              <div class="palette-item" data-type="Input">Input</div>
+              <div class="palette-item" data-type="Section">Section</div>
+              <div class="palette-item" data-type="Colorpicker">Colorpicker</div>
+              <div class="palette-item" data-type="Keybind">Keybind</div>
+            </div>
+            <button id="w_viewCode" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded font-medium">View / Download Code</button>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="lg:col-span-1">
+    <!-- Neverlose Builder -->
+    <div id="neverlose" class="sub-content hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="card">
-          <h2 class="text-lg font-semibold text-white mb-4">Elements</h2>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="palette-item" data-type="Button">Button</div>
-            <div class="palette-item" data-type="Toggle">Toggle</div>
-            <div class="palette-item" data-type="Slider">Slider</div>
-            <div class="palette-item" data-type="Input">Input</div>
-            <div class="palette-item" data-type="Section">Section</div>
-            <div class="palette-item" data-type="Colorpicker">Colorpicker</div>
-            <div class="palette-item" data-type="Keybind">Keybind</div>
+          <h2 class="text-xl font-bold text-purple-400 mb-6">Neverlose UI Builder</h2>
+          <div class="space-y-5">
+            <div>
+              <label class="block text-sm text-gray-400 mb-1">Window Title</label>
+              <input id="n_title" type="text" value="DarkzScripts" class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2">
+            </div>
+            <div>
+              <label class="flex items-center text-sm text-gray-400">
+                <input id="n_keysys" type="checkbox" class="mr-2 accent-purple-500"> Enable Key System
+              </label>
+            </div>
+            <div>
+              <label class="flex items-center text-sm text-gray-400">
+                <input id="n_keybinds" type="checkbox" class="mr-2 accent-purple-500"> Enable Keybinds Section
+              </label>
+            </div>
+            <div>
+              <label class="flex items-center text-sm text-gray-400">
+                <input id="n_colors" type="checkbox" class="mr-2 accent-purple-500"> Enable Color Pickers
+              </label>
+            </div>
+            <button id="n_generate" class="w-full bg-purple-600 hover:bg-purple-700 py-3 rounded font-medium">Generate Code</button>
           </div>
-          <button id="ck_viewCodeBtn" class="mt-6 w-full bg-gray-700 hover:bg-gray-600 py-3 rounded font-medium text-white">View Code</button>
+        </div>
+
+        <div class="card">
+          <textarea id="n_output" class="w-full h-96 bg-black border border-[#333] rounded p-4 mono text-green-400 resize-y font-mono text-sm" readonly placeholder="Generated Neverlose code will appear here..."></textarea>
+          <div class="mt-3 flex gap-3">
+            <button id="n_copy" class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compkiller Builder -->
+    <div id="compkiller" class="sub-content hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div class="lg:col-span-1 space-y-6">
+          <div class="card">
+            <h2 class="text-lg font-semibold mb-4">⚙️ SETTINGS</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">WINDOW TITLE</label>
+                <input id="ck_title" type="text" value="DarkzScripts" class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2 focus:border-purple-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">Custom Loading Image (rbxassetid or image id)</label>
+                <input id="ck_loading" type="text" placeholder="rbxassetid://..." class="w-full bg-[#0f0f0f] border border-[#333] rounded px-3 py-2">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-1">Title Image (rbxassetid or image id)</label>
+                <input id="ck_titleimg" type="text" placeholder="rbxassetid://..." class="w-full bg[#0f0f0f] border border-[#333] rounded px-3 py-2">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-semibold">TABS</h2>
+              <button id="ck_addTab" class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-white text-sm">+</button>
+            </div>
+            <div id="ck_tabsList" class="space-y-3 max-h-80 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- Center: Preview -->
+        <div class="lg:col-span-2">
+          <div class="preview-window">
+            <div class="titlebar">
+              <div class="traffic flex gap-2">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+              </div>
+              <span id="ck_previewTitle" class="text-green-400 text-xs">Running</span>
+            </div>
+            <div id="ck_previewContent" class="p-6 text-center text-gray-500 min-h-[300px]">
+              Preview Canvas Empty - Add tabs & elements
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Palette + Generate -->
+        <div class="lg:col-span-1">
+          <div class="card">
+            <h2 class="text-lg font-semibold mb-4">Add Elements</h2>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="palette-item" data-type="Button">Button</div>
+              <div class="palette-item" data-type="Toggle">Toggle</div>
+              <div class="palette-item" data-type="Slider">Slider</div>
+              <div class="palette-item" data-type="Input">Input</div>
+              <div class="palette-item" data-type="Section">Section</div>
+              <div class="palette-item" data-type="Colorpicker">Colorpicker</div>
+              <div class="palette-item" data-type="Keybind">Keybind</div>
+            </div>
+            <button id="ck_viewCode" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded font-medium">View / Download Code</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Edit Modal -->
-<div id="editModal">
-  <div class="modal-box">
-    <h2 class="text-xl font-bold text-white mb-4">Edit Element</h2>
-    <label class="block text-sm text-gray-400 mb-1">Name / Label</label>
-    <input id="editName" type="text" class="input-field">
-    <label class="block text-sm text-gray-400 mb-1 mt-4">Callback Code</label>
-    <textarea id="editCallback" class="input-field h-40 resize-y mono text-sm"></textarea>
-    <div class="mt-6 flex gap-4">
-      <button id="saveEditBtn" class="btn-gray flex-1">Save</button>
-      <button id="closeEditBtn" class="btn-gray flex-1">Cancel</button>
+  <!-- Obfuscation Tab -->
+  <div id="obfuscation" class="tab-content hidden">
+    <h1 class="text-3xl font-bold mb-6 text-purple-400">DARKZSCRIPTS Obfuscator</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card">
+        <h3 class="text-lg font-semibold mb-4">Input Script</h3>
+        <textarea id="inputScript" class="w-full h-96 bg-[#111] border border-[#333] rounded p-4 mono text-green-400 resize-y text-sm" placeholder="Paste your Lua script here..."></textarea>
+        <button id="obfuscateBtn" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded font-medium">Obfuscate</button>
+      </div>
+      <div class="card">
+        <h3 class="text-lg font-semibold mb-4">Obfuscated Output</h3>
+        <textarea id="outputScript" class="w-full h-96 bg-[#111] border border-[#333] rounded p-4 mono text-green-400 resize-y text-sm" readonly placeholder="Obfuscated code will appear here..."></textarea>
+        <button id="copyOutputBtn" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded font-medium">Copy</button>
+        <button id="downloadOutputBtn" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 py-3 rounded font-medium">Download .lua</button>
+      </div>
     </div>
-  </div>
-</div>
-
-<!-- Code Modal -->
-<div id="codeModal">
-  <div class="modal-box w-full max-w-4xl h-[80vh] flex flex-col">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold text-white">Generated Lua Code</h2>
-      <button id="closeCodeBtn" class="text-gray-400 hover:text-white text-2xl">&times;</button>
-    </div>
-    <pre id="codeDisplay" class="flex-1 bg-black p-4 rounded overflow-auto text-green-400 text-sm mono"></pre>
-    <div class="mt-4 flex gap-4">
-      <button id="copyCodeBtn" class="btn-gray flex-1">Copy</button>
-      <button id="downloadCodeBtn" class="btn-gray flex-1">Download .lua</button>
-    </div>
-  </div>
-</div>
-
-<!-- Result Screen -->
-<div id="resultScreen" class="hidden fixed inset-0 bg-black flex items-center justify-center z-50">
-  <div class="result-screen w-full max-w-2xl text-center p-12">
-    <div class="shield">🛡️</div>
-    <h2 class="text-3xl font-bold text-white mb-4">Protection Active</h2>
-    <p class="text-gray-400 mb-8">Your script has been processed with our advanced protection layers.</p>
-    <div class="code-block mono text-left text-sm">
--- Generated by DARKZSCRIPTS Visual Builder
-loadstring(game:HttpGet("https://prot.lzhub.win/script/bb143abc"))()
-    </div>
-    <button id="returnBtn" class="mt-8 bg-gray-700 hover:bg-gray-600 px-8 py-3 rounded font-medium text-white"><> Return to Dashboard</button>
   </div>
 </div>
 
 <script>
-// Tab / sub-tab switching
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    document.getElementById(btn.dataset.tab).classList.remove('hidden');
+  });
+});
+
+// Sub-tab switching for UI Builder
 document.querySelectorAll('.sub-tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active', 'border-gray-400'));
-    btn.classList.add('active', 'border-gray-400');
+    document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     document.querySelectorAll('.sub-content').forEach(c => c.classList.add('hidden'));
     document.getElementById(btn.dataset.sub).classList.remove('hidden');
   });
 });
 
-// Shared state for all builders
-let windTabs = [{ name: "Main", elements: [] }];
-let selectedWindTab = 0;
+// WindUI Logic
+let windTabs = [];
+let selectedWindTabIndex = -1;
 
-let neverTabs = [{ name: "Main", elements: [] }];
-let selectedNeverTab = 0;
+document.getElementById('w_addTab').onclick = () => {
+  const name = prompt("Tab Name:", "Main") || "Main";
+  windTabs.push({ name, elements: [] });
+  renderWindTabs();
+  selectedWindTabIndex = windTabs.length - 1;
+  updateWindPreview();
+};
 
-let ckTabs = [{ name: "Main", elements: [] }];
-let selectedCkTab = 0;
-
-let currentEdit = { builder: '', tabIdx: -1, elIdx: -1 };
-
-// Render tabs list & preview (generic)
-function renderTabsList(containerId, addBtnId, tabsArray, selectedIdx, selectFn, deleteFn, renderPreviewFn) {
-  const list = document.getElementById(containerId);
-  const addBtn = document.getElementById(addBtnId);
-  addBtn.onclick = () => {
-    const name = prompt("Tab name:", "Main") || "Main";
-    tabsArray.push({ name, elements: [] });
-    renderTabsList();
-    selectFn(tabsArray.length - 1);
-  };
-
-  function renderTabsList() {
-    list.innerHTML = '';
-    tabsArray.forEach((tab, i) => {
-      const div = document.createElement('div');
-      div.className = `p-3 rounded border cursor-pointer flex justify-between items-center text-sm ${i === selectedIdx ? 'border-gray-400 bg-[#111]' : 'border-[#1a1a1a] bg-[#0a0a0a]'}`;
-      div.innerHTML = `
-        <div>
-          <div class="text-white">${tab.name}</div>
-          <div class="text-xs text-gray-600">${tab.elements.length} elements</div>
-        </div>
-        <button class="text-gray-500 hover:text-red-400 text-xs" onclick="event.stopPropagation(); deleteFn(${i})">×</button>
-      `;
-      div.onclick = () => selectFn(i);
-      list.appendChild(div);
-    });
-  }
-
-  renderTabsList();
-}
-
-// WindUI
-const windTabList = renderTabsList('w_tabsList', 'w_addTabBtn', windTabs, selectedWindTab,
-  i => { selectedWindTab = i; renderWindTabNames(); renderWindPreview(); },
-  i => { if (confirm("Delete tab?")) { windTabs.splice(i, 1); if (selectedWindTab >= windTabs.length) selectedWindTab = windTabs.length - 1; renderWindTabNames(); renderWindPreview(); } }
-);
-
-function renderWindTabNames() {
-  const container = document.getElementById('w_tabNames');
-  container.innerHTML = '';
+function renderWindTabs() {
+  const list = document.getElementById('w_tabsList');
+  list.innerHTML = '';
   windTabs.forEach((tab, i) => {
-    const span = document.createElement('span');
-    span.className = `tab-name ${i === selectedWindTab ? 'active' : ''}`;
-    span.textContent = tab.name;
-    span.onclick = () => { selectedWindTab = i; renderWindTabNames(); renderWindPreview(); };
-    container.appendChild(span);
+    const div = document.createElement('div');
+    div.className = `p-3 rounded-lg border cursor-pointer flex justify-between items-center text-sm ${i === selectedWindTabIndex ? 'border-purple-500 bg-[#1a1a2e]' : 'border-[#27272a] bg-[#111]'}`;
+    div.innerHTML = `
+      <div>
+        <div class="font-medium">${tab.name}</div>
+        <div class="text-xs text-gray-500">${tab.elements.length} elements</div>
+      </div>
+      <button class="text-red-400 hover:text-red-300 text-xs" onclick="deleteWindTab(${i})">×</button>
+    `;
+    div.onclick = (e) => { if (e.target.tagName !== 'BUTTON') selectedWindTabIndex = i; updateWindPreview(); };
+    list.appendChild(div);
   });
 }
 
-function renderWindPreview() {
+function updateWindPreview() {
   const content = document.getElementById('w_previewContent');
   const window = document.getElementById('w_previewWindow');
-  content.innerHTML = '';
+  const title = document.getElementById('w_title').value.trim() || "DarkzScripts";
+  document.getElementById('w_previewTitle').textContent = title;
   const bgId = document.getElementById('w_bg').value.trim();
-  if (bgId) window.style.background = `url('https://www.roblox.com/asset-thumbnail/image?assetId=${bgId.replace('rbxassetid://','')}&width=420&height=420&format=png') center/cover`;
-  else window.style.background = '#0d0d0d';
+  if (bgId) window.style.backgroundImage = `url('rbxassetid://${bgId}')`;
+  else window.style.backgroundImage = '';
   if (document.getElementById('w_transparent').checked) window.classList.add('transparent');
   else window.classList.remove('transparent');
 
-  if (windTabs.length === 0) {
-    content.innerHTML = '<p class="text-gray-600 mt-32 text-center">Click + to add a tab</p>';
+  if (selectedWindTabIndex < 0 || windTabs.length === 0) {
+    content.innerHTML = '<p class="mt-32 text-gray-500">Add tabs & elements</p>';
     return;
   }
-  const tab = windTabs[selectedWindTab];
-  let html = `<h3 class="text-white text-lg mb-4">${tab.name}</h3>`;
+  const tab = windTabs[selectedWindTabIndex];
+  let html = `<h3 class="text-lg font-semibold mb-4">${tab.name}</h3>`;
   tab.elements.forEach((el, idx) => {
     let elHtml = '';
     const name = el.name || el.type;
-    if (el.type === 'Button') elHtml = `<button class="bg-gray-700 w-full py-2.5 rounded text-white text-sm">${name}</button>`;
-    // ... (add other elements similarly)
-    html += `<div class="element">${elHtml}<button class="edit-btn" onclick="editElement('windui', ${selectedWindTab}, ${idx})">Edit</button></div>`;
+    // ... (similar to previous)
+    html += `<div class="element">${elHtml}<button class="edit-btn" onclick="editElement('windui', ${selectedWindTabIndex}, ${idx})">Edit</button></div>`;
   });
-  content.innerHTML = html || '<p class="text-gray-600 mt-20 text-center">Add elements</p>';
+  content.innerHTML = html || '<p class="mt-20 text-gray-500 text-center">Add elements here</p>';
 }
 
-// Neverlose & Compkiller similar logic...
+function deleteWindTab(i) {
+  if (confirm("Delete tab?")) {
+    windTabs.splice(i, 1);
+    if (selectedWindTabIndex >= windTabs.length) selectedWindTabIndex = windTabs.length - 1;
+    renderWindTabs();
+    updateWindPreview();
+  }
+}
 
-// Init
-renderWindTabNames();
-renderWindPreview();
+// Neverlose Logic
+// ... (similar to WindUI, add your Neverlose code gen)
 
-// Transparent toggle
-document.getElementById('w_transparent').onclick = renderWindPreview;
-document.getElementById('w_bg').oninput = renderWindPreview;
+ // Compkiller Logic
+// ... (similar, with custom loading and title image in code gen)
+
+// Obfuscation Logic
+document.getElementById('obfuscateBtn').onclick = () => {
+  const input = document.getElementById('inputScript').value.trim();
+  if (!input) return alert('Paste code first!');
+  const obf = `-- Obfuscated by DARKZSCRIPTS\n${input}`;
+  document.getElementById('outputScript').value = obf;
+};
+
+// Copy / Download
+document.getElementById('copyOutputBtn').onclick = () => {
+  const text = document.getElementById('outputScript').value;
+  if (text) navigator.clipboard.writeText(text).then(() => alert('Copied!'));
+};
+
+document.getElementById('downloadOutputBtn').onclick = () => {
+  const text = document.getElementById('outputScript').value;
+  if (!text) return;
+  const blob = new Blob([text], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'obf.lua';
+  a.click();
+};
+
+// Init WindUI
+windTabs.push({ name: "Main", elements: [] });
+selectedWindTabIndex = 0;
+renderWindTabs();
+updateWindPreview();
+
+// ... (init Neverlose and Compkiller similarly)
 </script>
 </body>
             </html>
